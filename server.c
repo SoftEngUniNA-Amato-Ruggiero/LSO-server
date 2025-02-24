@@ -1,17 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <signal.h>
+#include <string.h>
 
-#define PORT 9999
-#define ADDRESS "127.0.0.1"
-#define MAXCLIENTS 10
-#define MAXBUFFER 999999
+#include "server.h"
 
 int welcomeSocket;
 int clientSocket;
@@ -19,10 +16,7 @@ struct sockaddr_in serverAddress;
 struct sockaddr_in clientAddress;
 socklen_t clientAddressLength = sizeof(struct sockaddr_in);
 
-void signalHandler();
-void clientRequestHandler();
-
-int main() {
+int runServer() {
     signal(SIGINT, signalHandler); 
     memset(&serverAddress, 0, sizeof(struct sockaddr_in));
     memset(&clientAddress, 0, sizeof(struct sockaddr_in));
@@ -64,7 +58,7 @@ int main() {
         clientRequestHandler();
     } while (1);
 
-    return 0;
+    exit(0);
 }
 
 void clientRequestHandler() {
@@ -77,19 +71,7 @@ void clientRequestHandler() {
     else if (childPid == 0)
     {
         close(welcomeSocket);
-
-        // read message from client
-        char buffer[MAXBUFFER];
-        int readResult = read(clientSocket, buffer, MAXBUFFER);
-        if (readResult < 0) {
-            perror("read failed");
-            exit(EXIT_FAILURE);
-        }
-
-        // execute server code
-        printf("Received message:\n%s\n", buffer);
-
-        // close client socket
+        serveRequest();
         close(clientSocket);
         exit(0);
     }
@@ -97,6 +79,24 @@ void clientRequestHandler() {
     {
         close(clientSocket);
     }
+}
+
+void serveRequest(){
+    char buffer[MAXBUFFER];
+    readClientMessage(buffer);
+    printf("Received message:\n%s\n", buffer);
+
+    // TODO: estrarre informazioni sulla personalitá dell'utente
+    // TODO: determinare comportamento del robot
+}
+
+char* readClientMessage(char buffer[]){
+    int readResult = read(clientSocket, buffer, MAXBUFFER);
+    if (readResult < 0) {
+        perror("read failed");
+        exit(EXIT_FAILURE);
+    }
+    return buffer;
 }
 
 void signalHandler(){
