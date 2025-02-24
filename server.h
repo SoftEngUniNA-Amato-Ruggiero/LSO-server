@@ -11,6 +11,6 @@ void signalHandler();
 void clientRequestHandler();
 void serveRequest();
 char* readClientMessage(char buffer[]);
-void writeClientMessage(char message[]);
+void writeClientMessage(const char *message);
 
 #endif

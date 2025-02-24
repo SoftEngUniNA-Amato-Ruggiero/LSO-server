@@ -100,7 +100,7 @@ char* readClientMessage(char buffer[]){
     return buffer;
 }
 
-void writeClientMessage(char message[]){
+void writeClientMessage(const char *message){
     int writeResult = write(clientSocket, message, sizeof(char)*(strlen(message)));
     if (writeResult < 0) {
         perror("write failed");
