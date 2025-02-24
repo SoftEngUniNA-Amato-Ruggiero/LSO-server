@@ -17,7 +17,7 @@ struct sockaddr_in clientAddress;
 socklen_t clientAddressLength = sizeof(struct sockaddr_in);
 
 int runServer() {
-    signal(SIGINT, signalHandler); 
+    signal(SIGINT, &signalHandler); 
     memset(&serverAddress, 0, sizeof(struct sockaddr_in));
     memset(&clientAddress, 0, sizeof(struct sockaddr_in));
 
