@@ -88,6 +88,9 @@ void serveRequest(){
 
     // TODO: estrarre informazioni sulla personalitá dell'utente
     // TODO: determinare comportamento del robot
+
+    char response[] = "hello from the server";
+    writeClientMessage(response);
 }
 
 char* readClientMessage(char buffer[]){
@@ -97,6 +100,14 @@ char* readClientMessage(char buffer[]){
         exit(EXIT_FAILURE);
     }
     return buffer;
+}
+
+void writeClientMessage(char message[]){
+    int writeResult = write(clientSocket, message, sizeof(char)*strlen(message));
+    if (writeResult < 0) {
+        perror("write failed");
+        exit(EXIT_FAILURE);
+    }
 }
 
 void signalHandler(){
