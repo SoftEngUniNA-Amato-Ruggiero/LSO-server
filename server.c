@@ -28,12 +28,12 @@ int runServer() {
         exit(EXIT_FAILURE);
     }
 
-    printf("Setting welcome socket address...\n");
+    printf("Setting server address...\n");
     serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = INADDR_ANY;
+    serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
     serverAddress.sin_port = htons(PORT);
 
-    printf("Binding welcome socket...\n");
+    printf("Binding welcome socket to server address...\n");
     int bindResult = bind(welcomeSocket, (struct sockaddr *) &serverAddress, sizeof(struct sockaddr));
     if (bindResult < 0) {
         perror("bind failed");
@@ -52,13 +52,11 @@ int runServer() {
         clientSocket = accept(welcomeSocket, (struct sockaddr *) &clientAddress, &clientAddressLength);
         if (clientSocket < 0) {
             perror("accept failed");
-            continue;
+        } else {
+            printf("Client connected\n");
+            clientRequestHandler();
         }
-        printf("Client connected\n");
-        clientRequestHandler();
     } while (1);
-
-    exit(0);
 }
 
 void clientRequestHandler() {
@@ -103,7 +101,7 @@ char* readClientMessage(char buffer[]){
 }
 
 void writeClientMessage(char message[]){
-    int writeResult = write(clientSocket, message, sizeof(char)*strlen(message));
+    int writeResult = write(clientSocket, message, sizeof(char)*(strlen(message)+1));
     if (writeResult < 0) {
         perror("write failed");
         exit(EXIT_FAILURE);
