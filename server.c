@@ -101,7 +101,7 @@ char* readClientMessage(char buffer[]){
 }
 
 void writeClientMessage(char message[]){
-    int writeResult = write(clientSocket, message, sizeof(char)*(strlen(message)+1));
+    int writeResult = write(clientSocket, message, sizeof(char)*(strlen(message)));
     if (writeResult < 0) {
         perror("write failed");
         exit(EXIT_FAILURE);
