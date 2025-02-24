@@ -17,8 +17,7 @@ int welcomeSocket;
 int clientSocket;
 struct sockaddr_in serverAddress;
 struct sockaddr_in clientAddress;
-int clientAddressLength = sizeof(struct sockaddr_in);
-char buffer[MAXBUFFER];
+socklen_t clientAddressLength = sizeof(struct sockaddr_in);
 
 void signalHandler();
 void clientRequestHandler();
@@ -37,7 +36,7 @@ int main() {
 
     printf("Setting welcome socket address...\n");
     serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = inet_addr(ADDRESS);
+    serverAddress.sin_addr.s_addr = INADDR_ANY;
     serverAddress.sin_port = htons(PORT);
 
     printf("Binding welcome socket...\n");
@@ -56,10 +55,10 @@ int main() {
 
     printf("(press Ctrl+C to stop)\n");
     do{
-        clientSocket = accept(welcomeSocket, (struct sockaddr *) &clientAddress, (socklen_t *) &clientAddressLength);
+        clientSocket = accept(welcomeSocket, (struct sockaddr *) &clientAddress, &clientAddressLength);
         if (clientSocket < 0) {
             perror("accept failed");
-            exit(EXIT_FAILURE);
+            continue;
         }
         printf("Client connected\n");
         clientRequestHandler();
@@ -72,12 +71,15 @@ void clientRequestHandler() {
     pid_t childPid = fork();
     if (childPid < 0)
     {
-        perror("fork");
+        perror("fork failed");
         exit(1);
     }
     else if (childPid == 0)
     {
+        close(welcomeSocket);
+
         // read message from client
+        char buffer[MAXBUFFER];
         int readResult = read(clientSocket, buffer, MAXBUFFER);
         if (readResult < 0) {
             perror("read failed");
@@ -90,6 +92,10 @@ void clientRequestHandler() {
         // close client socket
         close(clientSocket);
         exit(0);
+    }
+    else
+    {
+        close(clientSocket);
     }
 }
 
