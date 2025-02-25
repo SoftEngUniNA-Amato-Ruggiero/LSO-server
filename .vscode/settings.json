@@ -9,5 +9,9 @@
         "typeinfo": "c",
         "processpersonality.h": "c"
     },
-    "makefile.configureOnOpen": true
+    "makefile.configureOnOpen": true,
+    "sonarlint.connectedMode.project": {
+        "connectionId": "softengunina-amato-ruggiero",
+        "projectKey": "SoftEngUniNA-Amato-Ruggiero_LSO-server"
+    }
 }
