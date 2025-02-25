@@ -1,7 +1,7 @@
 CFLAGS = -Wall -pedantic -O3 -fsanitize=address
 
 main: main.o server.o processPersonality.o cJSON.o
-	gcc $(CFLAGS) -o main main.c server.o processPersonality.o cJSON.o
+	gcc $(CFLAGS) -o main main.o server.o processPersonality.o cJSON.o
 
 main.o: main.c server.h processPersonality.h
 	gcc $(CFLAGS) -c main.c
