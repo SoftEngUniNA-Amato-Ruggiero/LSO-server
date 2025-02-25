@@ -6,7 +6,8 @@
         "netdb.h": "c",
         "server.h": "c",
         "signal.h": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "processpersonality.h": "c"
     },
     "makefile.configureOnOpen": true
 }

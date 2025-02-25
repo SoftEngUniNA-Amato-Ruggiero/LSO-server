@@ -1,4 +1,4 @@
-CFLAGS = -Wall -pedantic -O2 -fsanitize=address
+CFLAGS = -Wall -pedantic -O3 -fsanitize=address
 
 main: main.c server.o 
 	gcc $(CFLAGS) -o main main.c server.o processPersonality.o cJSON.o
