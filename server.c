@@ -19,7 +19,8 @@ struct sockaddr_in clientAddress;
 socklen_t clientAddressLength = sizeof(struct sockaddr_in);
 
 int runServer() {
-    signal(SIGINT, &signalHandler); 
+    signal(SIGINT, &sigintHandler); 
+    signal(SIGUSR1, &sigusr1Handler);
     memset(&serverAddress, 0, sizeof(struct sockaddr_in));
     memset(&clientAddress, 0, sizeof(struct sockaddr_in));
 
@@ -39,18 +40,19 @@ int runServer() {
     int bindResult = bind(welcomeSocket, (struct sockaddr *) &serverAddress, sizeof(struct sockaddr));
     if (bindResult < 0) {
         perror("bind failed");
-        exit(EXIT_FAILURE);
+        raise(SIGUSR1);
     }
 
     printf("Listening on welcome socket...\n");
     int listenResult = listen(welcomeSocket, MAXCLIENTS);
     if (listenResult < 0) {
         perror("listen failed");
-        exit(EXIT_FAILURE);
+        raise(SIGUSR1);
     }
+    
+    printf("(press Ctrl+C to stop)\n\n");
 
-    printf("(press Ctrl+C to stop)\n");
-    do{
+    do{    
         clientSocket = accept(welcomeSocket, (struct sockaddr *) &clientAddress, &clientAddressLength);
         if (clientSocket < 0) {
             perror("accept failed");
@@ -66,14 +68,14 @@ void clientRequestHandler() {
     if (childPid < 0)
     {
         perror("fork failed");
-        exit(1);
+        raise(SIGUSR1);
     }
     else if (childPid == 0)
     {
         close(welcomeSocket);
         serveRequest();
         close(clientSocket);
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
     else
     {
@@ -84,31 +86,40 @@ void clientRequestHandler() {
 void serveRequest(){
     char buffer[MAXBUFFER];
     readMessageFromClient(buffer);
-    printf("Received message:\n%s\n", buffer);
+    printf("Received message:\n%s ", buffer);
 
     char *personality = processPersonality(buffer);
+    if (personality == NULL){
+        printf("Error processing personality\n\n");
+        return;
+    }
     writeMessageToClient(personality);
 }
 
-char* readMessageFromClient(char buffer[]){
+void readMessageFromClient(char buffer[]){
     int readResult = read(clientSocket, buffer, MAXBUFFER);
     if (readResult < 0) {
         perror("read failed");
-        exit(EXIT_FAILURE);
+        raise(SIGUSR1);
     }
-    return buffer;
+    return;
 }
 
 void writeMessageToClient(const char *message){
     int writeResult = write(clientSocket, message, sizeof(char)*(strlen(message)));
     if (writeResult < 0) {
         perror("write failed");
-        exit(EXIT_FAILURE);
+        raise(SIGUSR1);
     }
 }
 
-void signalHandler(){
+void sigintHandler(){
     close(welcomeSocket);
-    printf("\nStopped.\n");
-    exit(0);
+    printf("Stopped.\n");
+    exit(EXIT_SUCCESS);
+}
+
+void sigusr1Handler(){
+    close(welcomeSocket);
+    exit(EXIT_FAILURE);
 }

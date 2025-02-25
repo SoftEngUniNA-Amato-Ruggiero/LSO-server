@@ -4,13 +4,14 @@
 #define PORT 9999
 #define ADDRESS "127.0.0.1"
 #define MAXCLIENTS 10
-#define MAXBUFFER 999999
+#define MAXBUFFER 500
 
 int runServer();
-void signalHandler();
+void sigintHandler();
+void sigusr1Handler();
 void clientRequestHandler();
 void serveRequest();
-char* readMessageFromClient(char buffer[]);
+void readMessageFromClient(char buffer[]);
 void writeMessageToClient(const char *message);
 
 #endif
