@@ -1,7 +1,7 @@
 FROM gcc:14
 
-COPY . /usr/src/myapp
-WORKDIR /usr/src/myapp
+COPY . /usr/src/lso-server
+WORKDIR /usr/src/lso-server
 RUN make -j
 EXPOSE 9999
 CMD ["./main"]
