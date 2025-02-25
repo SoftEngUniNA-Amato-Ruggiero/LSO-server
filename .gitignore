@@ -2,3 +2,5 @@
 *.exe
 *.o
 main
+*.json
+readFile.c

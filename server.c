@@ -10,6 +10,8 @@
 #include <signal.h>
 #include <string.h>
 
+#include "processPersonality.h"
+
 int welcomeSocket;
 int clientSocket;
 struct sockaddr_in serverAddress;
@@ -81,17 +83,14 @@ void clientRequestHandler() {
 
 void serveRequest(){
     char buffer[MAXBUFFER];
-    readClientMessage(buffer);
+    readMessageFromClient(buffer);
     printf("Received message:\n%s\n", buffer);
 
-    // TODO: estrarre informazioni sulla personalitá dell'utente
-    // TODO: determinare comportamento del robot
-
-    char response[] = "hello from the server";
-    writeClientMessage(response);
+    char *personality = processPersonality(buffer);
+    writeMessageToClient(personality);
 }
 
-char* readClientMessage(char buffer[]){
+char* readMessageFromClient(char buffer[]){
     int readResult = read(clientSocket, buffer, MAXBUFFER);
     if (readResult < 0) {
         perror("read failed");
@@ -100,7 +99,7 @@ char* readClientMessage(char buffer[]){
     return buffer;
 }
 
-void writeClientMessage(const char *message){
+void writeMessageToClient(const char *message){
     int writeResult = write(clientSocket, message, sizeof(char)*(strlen(message)));
     if (writeResult < 0) {
         perror("write failed");

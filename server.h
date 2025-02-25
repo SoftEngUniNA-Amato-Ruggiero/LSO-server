@@ -10,7 +10,7 @@ int runServer();
 void signalHandler();
 void clientRequestHandler();
 void serveRequest();
-char* readClientMessage(char buffer[]);
-void writeClientMessage(const char *message);
+char* readMessageFromClient(char buffer[]);
+void writeMessageToClient(const char *message);
 
 #endif

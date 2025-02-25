@@ -5,6 +5,8 @@
         "unistd.h": "c",
         "netdb.h": "c",
         "server.h": "c",
-        "signal.h": "c"
-    }
+        "signal.h": "c",
+        "typeinfo": "c"
+    },
+    "makefile.configureOnOpen": true
 }
