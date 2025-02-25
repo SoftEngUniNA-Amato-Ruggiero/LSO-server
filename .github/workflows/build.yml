@@ -16,13 +16,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-          
+
       - name: Install Build Wrapper
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v4
 
       - name: Run Build Wrapper
         run: |
           build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make clean && make -j
+
+      - name: Print Build Output
+        run: |
+          cat ${{ env.BUILD_WRAPPER_OUT_DIR }}/build-wrapper-dump.json
 
       - name: Check Compile Commands
         run: |
