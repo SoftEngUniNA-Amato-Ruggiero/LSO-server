@@ -46,7 +46,7 @@ int processJson(const char json_data[]) {
 
     cJSON *json = cJSON_Parse(json_data);
     if (!json) {
-        printf("Error parsing JSON\n");
+        perror("Error parsing JSON\n");
         return 1;
     }
 
