@@ -8,5 +8,5 @@ else
     docker="docker"
 fi
 
-$docker build -t lso-server .
+$docker build -t lso-server . && \
 $docker run -it --rm -p 9999:9999 --name running-lso-server lso-server
