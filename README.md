@@ -9,14 +9,23 @@ Il server riceve le risposte dell'utente e calcola una stima della personalitá 
 Il questionario di personalitá utilizzato è il [TIPI](https://gosling.psy.utexas.edu/scales-weve-developed/ten-item-personality-measure-tipi/).
 
 ## Usage
+   ### Requirements
+  - [gcc](https://gcc.gnu.org/) e [make](https://www.gnu.org/software/make/) (per eseguire localmente).
+  - [Docker](https://www.docker.com/) (per eseguire su container).
 
   ### Eseguire localmente:
-  `make -j`
-
-  `./main`
+  1. Compilazione:
+     ```sh
+     make -j
+  2. Esecuzione:
+     ```sh
+     ./main
 
   ### Eseguire su container:
-  `docker build -t lso-server .`
-
-  `docker run -it --rm -p 9999:9999 --name running-lso-server lso-server`
+  1. Build del container:
+     ```sh
+      docker build -t lso-server .
+  2. Esecuzione del container:
+     ```sh
+     docker run -it --rm -p 9999:9999 --name running-lso-server lso-server 
   
