@@ -1,4 +1,4 @@
-# Skill
+# Server
 LSO Server - Dialogare coi robot
 
 ## Description
