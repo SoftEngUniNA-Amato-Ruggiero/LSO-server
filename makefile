@@ -9,11 +9,11 @@ main.o: main.c server.h processPersonality.h
 server.o: server.c server.h processPersonality.h
 	gcc $(CFLAGS) -c server.c
 
-processPersonality.o: processPersonality.c processPersonality.h cJSON.h
+processPersonality.o: processPersonality.c processPersonality.h cJSON/cJSON.h
 	gcc $(CFLAGS) -c processPersonality.c
 
-cJSON.o: cJSON.c cJSON.h
-	gcc $(CFLAGS) -c cJSON.c
+cJSON.o: cJSON/cJSON.c cJSON/cJSON.h
+	gcc $(CFLAGS) -c cJSON/cJSON.c -o cJSON.o
 
 clean:
 	rm -f main
