@@ -1,5 +1,5 @@
-# Server
-LSO Server - Dialogare coi robot
+# LSO Server
+Dialogare coi robot
 
 ## Description
 Lato server del progetto di LSO anno 2024/2025.
