@@ -7,7 +7,8 @@ Il client ha il compito di fare da intermediario tra un robot ed una persona, pe
 Il server riceve le risposte dell'utente e calcola una stima della personalitá da inviare al client.
 
 Il questionario di personalitá utilizzato è il [TIPI](https://gosling.psy.utexas.edu/scales-weve-developed/ten-item-personality-measure-tipi/).
-Per il parsing dei JSON è stata utilizzata la libreria [cJSON](https://github.com/DaveGamble/cJSON)
+
+Per il parsing dei JSON è stata utilizzata la libreria [cJSON](https://github.com/DaveGamble/cJSON).
 
 ## Usage
    ### Requirements
