@@ -69,10 +69,10 @@ void calculatePersonality(const int answers[]) {
     personality_traits[OPENNESS] = calculateTrait(answers[COMPLEX], answers[CONVENTIONAL]);
 }
 
-int calculateTrait(const unsigned int a, const unsigned int b) {
+inline int calculateTrait(const unsigned int a, const unsigned int b) {
     return (a + recode(b)) >> 1;
 }
 
-int recode(const unsigned int i) {
+inline int recode(const unsigned int i) {
     return 8 - i;
 }
