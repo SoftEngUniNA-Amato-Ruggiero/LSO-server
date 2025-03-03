@@ -24,40 +24,40 @@ int runServer() {
     memset(&serverAddress, 0, sizeof(struct sockaddr_in));
     memset(&clientAddress, 0, sizeof(struct sockaddr_in));
 
-    // printf("Creating welcome socket...\n");
+    printf("Creating welcome socket...\n");
     welcomeSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (welcomeSocket < 0) {
         perror("socket creation failed");
         exit(EXIT_FAILURE);
     }
 
-    // printf("Setting server address...\n");
+    printf("Setting server address...\n");
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
     serverAddress.sin_port = htons(PORT);
 
-    // printf("Binding welcome socket to server address...\n");
+    printf("Binding welcome socket to server address...\n");
     int bindResult = bind(welcomeSocket, (struct sockaddr *) &serverAddress, sizeof(struct sockaddr));
     if (bindResult < 0) {
         perror("bind failed");
         raise(SIGUSR1);
     }
 
-    // printf("Listening on welcome socket...\n");
+    printf("Listening on welcome socket...\n");
     int listenResult = listen(welcomeSocket, MAXCLIENTS);
     if (listenResult < 0) {
         perror("listen failed");
         raise(SIGUSR1);
     }
     
-    // printf("(press Ctrl+C to stop)\n\n");
+    printf("(press Ctrl+C to stop)\n\n");
 
     do{    
         clientSocket = accept(welcomeSocket, (struct sockaddr *) &clientAddress, &clientAddressLength);
         if (clientSocket < 0) {
             perror("accept failed");
         } else {
-            // printf("Client connected\n");
+            printf("Client connected\n");
             clientRequestHandler();
         }
     } while (1);
@@ -86,9 +86,9 @@ void clientRequestHandler() {
 void serveRequest(){
     char buffer[MAXBUFFER];
     readMessageFromClient(buffer);
-    // printf("Received message:\n%s ", buffer);
+    printf("Received message:\n%s ", buffer);
 
-    char *personality = processPersonality(buffer);
+    const char *personality = processPersonality(buffer);
     if (personality == NULL){
         perror("Error processing personality\n\n");
         return;
@@ -115,7 +115,7 @@ void writeMessageToClient(const char *message){
 
 void sigintHandler(){
     close(welcomeSocket);
-    // printf("Stopped.\n");
+    printf("Stopped.\n");
     exit(EXIT_SUCCESS);
 }
 
