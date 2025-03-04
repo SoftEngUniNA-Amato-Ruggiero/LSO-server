@@ -1,4 +1,9 @@
-CFLAGS = -Wall -pedantic -O3 -fsanitize=address
+CFLAGS = -Wall -pedantic -O3 
+SANITIZE_FLAGS = -fsanitize=address
+
+ifeq ($(SANITIZE),1)
+    CFLAGS += $(SANITIZE_FLAGS)
+endif
 
 main: main.o server.o processPersonality.o cJSON.o
 	gcc $(CFLAGS) -o main main.o server.o processPersonality.o cJSON.o
