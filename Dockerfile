@@ -7,7 +7,7 @@ RUN apk update && \
 
 
 FROM docker.io/alpine:3.21
-COPY --from=build /usr/src/lso-server/main /usr/src/lso-server/main
-WORKDIR /usr/src/lso-server
+COPY --from=build /usr/src/lso-server/main /usr/app/lso-server/main
+WORKDIR /usr/app/lso-server
 EXPOSE 9999
 ENTRYPOINT ["./main"]
