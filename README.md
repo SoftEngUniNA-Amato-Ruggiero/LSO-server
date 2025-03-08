@@ -12,7 +12,8 @@ Per il parsing dei JSON è stata utilizzata la libreria [cJSON](https://github.c
 
 ## Usage
    ### Requirements
-  - [gcc](https://gcc.gnu.org/) e [make](https://www.gnu.org/software/make/) (per eseguire localmente).
+  - [gcc](https://gcc.gnu.org/) e [make](https://www.gnu.org/software/make/) (per compilare localmente).
+  - Sistema operativo compatibile con standard Posix (per eseguire localmente).
   - [Docker](https://www.docker.com/) (per eseguire su container).
 
   ### Eseguire localmente:
