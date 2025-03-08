@@ -111,11 +111,13 @@ void writeMessageToClient(const char *message){
         perror("Error writing message to client\n\n");
         raise(SIGUSR1);
     }
-    unsigned long messageLength = sizeof(char)*(strnlen(message, MAXBUFFER));
-    int writeResult = write(clientSocket, message, messageLength);
-    if (writeResult < 0) {
-        perror("write failed");
-        raise(SIGUSR1);
+    else {
+        unsigned long messageLength = sizeof(char)*(strnlen(message, MAXBUFFER));
+        int writeResult = write(clientSocket, message, messageLength);
+        if (writeResult < 0) {
+            perror("write failed");
+            raise(SIGUSR1);
+        }
     }
 }
 
