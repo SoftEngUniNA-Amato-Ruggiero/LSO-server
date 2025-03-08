@@ -30,10 +30,11 @@ char *processPersonality(const char json_data[]) {
         cJSON_AddNumberToObject(json, trait_names[i], personality_traits[i]);
     }
     
-    char *personality = cJSON_Print(json);
-    strcpy(ret, personality);
-    
+    char *personality = cJSON_Print(json);    
     cJSON_Delete(json);
+
+    strncpy(ret, personality, MAXBUFFER - 1);
+    ret[MAXBUFFER - 1] = '\0';
     free(personality);
 
     return ret;

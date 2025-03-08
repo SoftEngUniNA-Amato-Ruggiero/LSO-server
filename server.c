@@ -93,6 +93,7 @@ void serveRequest(){
         perror("Error processing personality\n\n");
         return;
     }
+    
     writeMessageToClient(personality);
 }
 
@@ -106,6 +107,11 @@ void readMessageFromClient(char buffer[]){
 }
 
 void writeMessageToClient(const char *message){
+    if (message == NULL){
+        perror("Error writing message to client\n\n");
+        raise(SIGUSR1);
+    }
+
     int writeResult = write(clientSocket, message, sizeof(char)*(strlen(message)));
     if (writeResult < 0) {
         perror("write failed");
