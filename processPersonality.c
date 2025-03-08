@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAXBUFFER 500
-
 const char *trait_names[NUM_TRAITS] = {
     "EXTROVERSION", "AGREEABLENESS", "CONSCIENTIOUSNESS", "EMOTIONAL_STABILITY", "OPENNESS"
 };
@@ -16,7 +14,7 @@ const char *attribute_names[NUM_ATTRIBUTES] = {
 
 int attribute_values[NUM_ATTRIBUTES];
 int personality_traits[NUM_TRAITS];
-char ret[MAXBUFFER];
+char personality[MAX_STRING_LENGTH];
 
 char *processPersonality(const char json_data[]) {
     if (processJson(json_data) != 0){
@@ -30,14 +28,11 @@ char *processPersonality(const char json_data[]) {
         cJSON_AddNumberToObject(json, trait_names[i], personality_traits[i]);
     }
     
-    char *personality = cJSON_Print(json);    
+    strncpy(personality, cJSON_Print(json), MAX_STRING_LENGTH - 1);
+    personality[MAX_STRING_LENGTH - 1] = '\0';
+
     cJSON_Delete(json);
-
-    strncpy(ret, personality, MAXBUFFER - 1);
-    ret[MAXBUFFER - 1] = '\0';
-    free(personality);
-
-    return ret;
+    return personality;
 }
 
 int processJson(const char json_data[]) {
