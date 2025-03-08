@@ -2,3 +2,5 @@
 *.exe
 *.o
 main
+*.json
+servertest.c
