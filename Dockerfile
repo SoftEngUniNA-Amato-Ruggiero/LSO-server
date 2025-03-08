@@ -10,4 +10,7 @@ FROM docker.io/alpine:3.21
 COPY --from=build /usr/src/lso-server/main /usr/app/lso-server/main
 WORKDIR /usr/app/lso-server
 EXPOSE 9999
+RUN addgroup -S nonroot && \
+    adduser -S nonroot -G nonroot
+USER nonroot
 ENTRYPOINT ["./main"]
