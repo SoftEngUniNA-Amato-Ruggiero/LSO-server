@@ -21,6 +21,7 @@ socklen_t clientAddressLength = sizeof(struct sockaddr_in);
 int runServer() {
     signal(SIGINT, &sigintHandler); 
     signal(SIGUSR1, &sigusr1Handler);
+    signal(SIGUSR2, &sigusr2Handler);
     memset(&serverAddress, 0, sizeof(struct sockaddr_in));
     memset(&clientAddress, 0, sizeof(struct sockaddr_in));
 
@@ -101,7 +102,8 @@ void readMessageFromClient(char buffer[]){
     int readResult = read(clientSocket, buffer, MAXBUFFER);
     if (readResult < 0) {
         perror("read failed");
-        raise(SIGUSR1);
+        close(clientSocket);
+        raise(SIGUSR2);
     }
     return;
 }
@@ -109,14 +111,14 @@ void readMessageFromClient(char buffer[]){
 void writeMessageToClient(const char *message){
     if (message == NULL){
         perror("Error writing message to client\n\n");
-        raise(SIGUSR1);
+        raise(SIGUSR2);
     }
     else {
         unsigned long messageLength = sizeof(char)*(strnlen(message, MAXBUFFER));
         int writeResult = write(clientSocket, message, messageLength);
         if (writeResult < 0) {
             perror("write failed");
-            raise(SIGUSR1);
+            raise(SIGUSR2);
         }
     }
 }
@@ -129,5 +131,10 @@ void sigintHandler(){
 
 void sigusr1Handler(){
     close(welcomeSocket);
+    exit(EXIT_FAILURE);
+}
+
+void sigusr2Handler(){
+    close(clientSocket);
     exit(EXIT_FAILURE);
 }
