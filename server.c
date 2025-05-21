@@ -89,18 +89,30 @@ void serveRequest(){
     readMessageFromClient(buffer);
     printf("Received message:\n%s ", buffer);
 
-    const char *personality = processPersonality(buffer);
+    char *personality = (char*) malloc(MAXBUFFER * sizeof(char));
     if (personality == NULL){
+        perror("Error allocating memory for personality\n\n");
+        raise(SIGUSR2);
+    }
+    memset(personality, 0, MAXBUFFER * sizeof(char));
+
+    int processPersonalityResult = processPersonality(buffer, personality);
+    if (processPersonalityResult != 0){
         perror("Error processing personality\n\n");
-        return;
+        free(personality);
+        personality = NULL;
+        raise(SIGUSR2);
     }
     
     writeMessageToClient(personality);
+
+    free(personality);
+    personality = NULL;
 }
 
 void readMessageFromClient(char buffer[]){
-    int readResult = read(clientSocket, buffer, MAXBUFFER);
-    if (readResult < 0) {
+    int recvResult = recv(clientSocket, buffer, MAXBUFFER, 0);
+    if (recvResult < 0) {
         perror("read failed");
         close(clientSocket);
         raise(SIGUSR2);
@@ -115,8 +127,8 @@ void writeMessageToClient(const char *message){
     }
     else {
         unsigned long messageLength = sizeof(char)*(strnlen(message, MAXBUFFER));
-        int writeResult = write(clientSocket, message, messageLength);
-        if (writeResult < 0) {
+        int sendResult = send(clientSocket, message, messageLength, 0);
+        if (sendResult < 0) {
             perror("write failed");
             raise(SIGUSR2);
         }

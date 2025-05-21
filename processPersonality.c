@@ -14,11 +14,10 @@ const char *attribute_names[NUM_ATTRIBUTES] = {
 
 int attribute_values[NUM_ATTRIBUTES];
 int personality_traits[NUM_TRAITS];
-char personality[MAX_STRING_LENGTH];
 
-char *processPersonality(const char json_data[]) {
+int processPersonality(const char json_data[], char *personality) {
     if (processJson(json_data) != 0){
-        return NULL;
+        return -1;
     }
 
     calculatePersonality(attribute_values);
@@ -28,11 +27,22 @@ char *processPersonality(const char json_data[]) {
         cJSON_AddNumberToObject(json, trait_names[i], personality_traits[i]);
     }
     
-    strncpy(personality, cJSON_Print(json), MAX_STRING_LENGTH - 1);
+    char *json_string = cJSON_Print(json);
+    if (!json_string) {
+        perror("Error creating JSON string\n");
+        cJSON_Delete(json);
+        return -1;
+    }
+    
+    strncpy(personality, json_string, MAX_STRING_LENGTH - 1);
+
+    free(json_string);
+    json_string = NULL;    
+
     personality[MAX_STRING_LENGTH - 1] = '\0';
 
     cJSON_Delete(json);
-    return personality;
+    return 0;
 }
 
 int processJson(const char json_data[]) {

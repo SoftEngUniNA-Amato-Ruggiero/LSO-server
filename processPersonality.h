@@ -13,7 +13,7 @@ enum Attributes {
     EXTROVERTED, CRITICAL, DEPENDABLE, ANXIOUS, COMPLEX, RESERVED, SYMPATHETIC, DISORGANIZED, CALM, CONVENTIONAL, NUM_ATTRIBUTES
 };
 
-char *processPersonality(const char json_data[]);
+int processPersonality(const char json_data[], char *personality);
 int processJson(const char *json_data);
 void calculatePersonality(const int *answers);
 void getAnswers(const cJSON *json);
