@@ -114,7 +114,6 @@ void readMessageFromClient(char buffer[]){
     int recvResult = recv(clientSocket, buffer, MAXBUFFER, 0);
     if (recvResult < 0) {
         perror("read failed");
-        close(clientSocket);
         raise(SIGUSR2);
     }
     return;

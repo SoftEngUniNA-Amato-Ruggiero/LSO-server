@@ -1,4 +1,4 @@
-run-container.sh
+*.sh
 .gitignore
 sonar-project.properties
 *.o
