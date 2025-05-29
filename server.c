@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
@@ -22,6 +23,7 @@ int runServer() {
     signal(SIGINT, &sigintHandler); 
     signal(SIGUSR1, &sigusr1Handler);
     signal(SIGUSR2, &sigusr2Handler);
+    signal(SIGCHLD, &sigchldHandler);
     memset(&serverAddress, 0, sizeof(struct sockaddr_in));
     memset(&clientAddress, 0, sizeof(struct sockaddr_in));
 
@@ -148,4 +150,8 @@ void sigusr1Handler(){
 void sigusr2Handler(){
     close(clientSocket);
     exit(EXIT_FAILURE);
+}
+
+void sigchldHandler(){
+    while (waitpid(-1, NULL, WNOHANG) > 0);
 }

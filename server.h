@@ -10,6 +10,7 @@ int runServer();
 void sigintHandler();
 void sigusr1Handler();
 void sigusr2Handler();
+void sigchldHandler();
 void clientRequestHandler();
 void serveRequest();
 void readMessageFromClient(char buffer[]);
